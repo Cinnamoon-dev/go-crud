@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -29,7 +30,6 @@ func getPerson() Person {
 	newPerson.Name = input("Name:")
 	newPerson.Email = input("Email:")
 	newPerson.Cpf = input("Cpf:")
-	newPerson.Name = input("Name:")
 	newPerson.Age = uint8(inputInt("Age:"))
 
 	return newPerson
@@ -40,17 +40,53 @@ func createPerson(people *[]Person) {
 	*people = append(*people, newPerson)
 }
 
-func editPerson(people *[]Person) {
-	// find person by cpf
-	// choose what field change
-	// insert new value
+func viewAllPerson(people []Person) {
+	for i := 0; i < len(people); i++ {
+		fmt.Println(people[i])
+	}
+}
+
+func findPerson(people *[]Person, cpf string) (*Person, error) {
+	// Use case
+	// person1, err := findPerson(&people, "1234")
+	// if err != nil {
+	// 	fmt.Println(err.Error())
+	// 	return
+	// }
+	for i := 0; i < len(*people); i++ {
+		if (*people)[i].Cpf == cpf {
+			var person *Person = &(*people)[i]
+			return person, nil
+		}
+	}
+
+	return nil, errors.New("Person not found")
+}
+
+func editPerson(people *[]Person, cpf string) {
+	person, err := findPerson(people, cpf)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
+	// TODO
+	// Check if cpf already exists when changing
+	choice := input("What field do you want do change?\n1 - Name\n2 - Email\n3 - Age\n4 - Cpf")
+
+	switch choice {
+	case "1":
+		person.Name = input("Name:")
+	case "2":
+		person.Email = input("Email:")
+	case "3":
+		person.Age = uint8(inputInt("Age:"))
+	case "4":
+		person.Cpf = input("Cpf:")
+	}
 }
 
 func input(message string) string {
-	// Use case
-	// response := input("say your name")
-	// fmt.Println("Hi, " + response + "!")
-
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print(message, "\n>> ")
 
@@ -75,41 +111,19 @@ func remove(slice []int, index int) []int {
 }
 
 func main() {
-	list := []int{1, 2, 3, 4, 5}
-	list = remove(list, 1)
-	showMainOptions()
-}
-
-func showMainOptions() {
-	fmt.Print(`
-1 - employee
-2 - car
-	`)
-}
-
-func mainOptions() {
 	var people []Person
 	var cars []Car
+	_ = cars
 
-	_, _ = people, cars
+	fmt.Println(people)
 
-	items :=
-		`1 - employee
-2 - car`
+	createPerson(&people)
+	createPerson(&people)
 
-	var choice string
+	fmt.Println(people)
 
-	for {
-		fmt.Println(items)
-		choice = input("choose a item")
+	editPerson(&people, "1234")
 
-		switch choice {
-		case "1":
-			fmt.Println("you chose employee!")
-		case "2":
-			fmt.Println("you chose car!")
-		default:
-			fmt.Println("none")
-		}
-	}
+	fmt.Println(people)
+
 }
