@@ -129,6 +129,8 @@ func main() {
 	var people []Person
 	var choice string
 
+	fmt.Println("Person registry")
+
 	for {
 		choice = input("1 - create\n2 - read all\n3 - read one\n4 - edit\n5 - delete\n6 - exit")
 		switch choice {
