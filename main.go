@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -56,18 +57,22 @@ func viewPerson(people *[]Person, cpf string) {
 	fmt.Println("Person not found")
 }
 
-func findPerson(people []Person, cpf string) int {
+func findPerson(people []Person, cpf string) (int, error) {
 	for i := 0; i < len(people); i++ {
 		if (people)[i].Cpf == cpf {
-			return i
+			return i, nil
 		}
 	}
 
-	return -1
+	return -1, errors.New("Person not found")
 }
 
 func editPerson(people *[]Person, cpf string) {
-	personIndex := findPerson(*people, cpf)
+	personIndex, err := findPerson(*people, cpf)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	// TODO
 	// Check if cpf already exists when changing
@@ -86,7 +91,12 @@ func editPerson(people *[]Person, cpf string) {
 }
 
 func deletePerson(people *[]Person, cpf string) []Person {
-	personIndex := findPerson(*people, cpf)
+	personIndex, err := findPerson(*people, cpf)
+	if err != nil {
+		fmt.Println(err)
+		return *people
+	}
+
 	return removePerson(*people, personIndex)
 }
 
