@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -57,29 +56,18 @@ func viewPerson(people *[]Person, cpf string) {
 	fmt.Println("Person not found")
 }
 
-func findPerson(people *[]Person, cpf string) (*Person, error) {
-	// Use case
-	// person1, err := findPerson(&people, "1234")
-	// if err != nil {
-	// 	fmt.Println(err.Error())
-	// 	return
-	// }
-	for i := 0; i < len(*people); i++ {
-		if (*people)[i].Cpf == cpf {
-			var person *Person = &(*people)[i]
-			return person, nil
+func findPerson(people []Person, cpf string) int {
+	for i := 0; i < len(people); i++ {
+		if (people)[i].Cpf == cpf {
+			return i
 		}
 	}
 
-	return nil, errors.New("Person not found")
+	return -1
 }
 
 func editPerson(people *[]Person, cpf string) {
-	person, err := findPerson(people, cpf)
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
+	personIndex := findPerson(*people, cpf)
 
 	// TODO
 	// Check if cpf already exists when changing
@@ -87,14 +75,18 @@ func editPerson(people *[]Person, cpf string) {
 
 	switch choice {
 	case "1":
-		person.Name = input("Name:")
+		(*people)[personIndex].Name = input("Name:")
 	case "2":
-		person.Email = input("Email:")
+		(*people)[personIndex].Email = input("Email:")
 	case "3":
-		person.Age = uint8(inputInt("Age:"))
+		(*people)[personIndex].Age = uint8(inputInt("Age:"))
 	case "4":
-		person.Cpf = input("Cpf:")
+		(*people)[personIndex].Cpf = input("Cpf:")
 	}
+}
+
+func deletePerson(people *[]Person, cpf string) {
+
 }
 
 func input(message string) string {
