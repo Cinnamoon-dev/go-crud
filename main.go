@@ -24,19 +24,35 @@ type Person struct {
 	Age   uint8
 }
 
-func getPerson() Person {
+func inputCpf(people []Person) string {
+	cpf := input("Cpf:")
+
+	for {
+		_, err := findPerson(people, cpf)
+		if err == nil {
+			cpf = input("This cpf already exists. Choose another:")
+			continue
+		}
+
+		break
+	}
+
+	return cpf
+}
+
+func getPerson(people []Person) Person {
 	var newPerson Person
 
 	newPerson.Name = input("Name:")
 	newPerson.Email = input("Email:")
-	newPerson.Cpf = input("Cpf:")
+	newPerson.Cpf = inputCpf(people)
 	newPerson.Age = uint8(inputInt("Age:"))
 
 	return newPerson
 }
 
 func createPerson(people *[]Person) {
-	newPerson := getPerson()
+	newPerson := getPerson(*people)
 	*people = append(*people, newPerson)
 }
 
@@ -46,8 +62,8 @@ func viewAllPerson(people []Person) {
 	}
 }
 
-func viewPerson(people *[]Person, cpf string) {
-	for _, v := range *people {
+func viewPerson(people []Person, cpf string) {
+	for _, v := range people {
 		if v.Cpf == cpf {
 			fmt.Println(v)
 			return
@@ -74,10 +90,7 @@ func editPerson(people *[]Person, cpf string) {
 		return
 	}
 
-	// TODO
-	// Check if cpf already exists when changing
 	choice := input("What field do you want do change?\n1 - Name\n2 - Email\n3 - Age\n4 - Cpf")
-
 	switch choice {
 	case "1":
 		(*people)[personIndex].Name = input("Name:")
@@ -86,7 +99,7 @@ func editPerson(people *[]Person, cpf string) {
 	case "3":
 		(*people)[personIndex].Age = uint8(inputInt("Age:"))
 	case "4":
-		(*people)[personIndex].Cpf = input("Cpf:")
+		(*people)[personIndex].Cpf = inputCpf(*people)
 	}
 }
 
