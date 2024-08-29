@@ -8,14 +8,6 @@ import (
 	"strings"
 )
 
-type Car struct {
-	Plate     string
-	Color     string
-	Model     string
-	Brand     string
-	PersonCpf string
-}
-
 type Person struct {
 	Name  string
 	Email string
