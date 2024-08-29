@@ -85,8 +85,9 @@ func editPerson(people *[]Person, cpf string) {
 	}
 }
 
-func deletePerson(people *[]Person, cpf string) {
-
+func deletePerson(people *[]Person, cpf string) []Person {
+	personIndex := findPerson(*people, cpf)
+	return removePerson(*people, personIndex)
 }
 
 func input(message string) string {
@@ -113,20 +114,32 @@ func remove(slice []int, index int) []int {
 	return append(slice[:index], slice[index+1:]...)
 }
 
+func removePerson(slice []Person, index int) []Person {
+	// Use case
+	// list := []int{1, 2, 3, 4, 5}
+	// list = remove(list, 1)
+	return append(slice[:index], slice[index+1:]...)
+}
+
 func main() {
 	var people []Person
-	var cars []Car
-	_ = cars
+	var choice string
 
-	fmt.Println(people)
-
-	createPerson(&people)
-	createPerson(&people)
-
-	fmt.Println(people)
-
-	editPerson(&people, "1234")
-
-	fmt.Println(people)
-
+	for {
+		choice = input("1 - create\n2 - read\n3 - edit\n4 - delete\n5 - exit")
+		switch choice {
+		case "1":
+			createPerson(&people)
+		case "2":
+			viewAllPerson(people)
+		case "3":
+			personCpf := input("Cpf of the person")
+			editPerson(&people, personCpf)
+		case "4":
+			personCpf := input("Cpf of the person")
+			people = deletePerson(&people, personCpf)
+		case "5":
+			return
+		}
+	}
 }
