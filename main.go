@@ -46,6 +46,17 @@ func viewAllPerson(people []Person) {
 	}
 }
 
+func viewPerson(people *[]Person, cpf string) {
+	for _, v := range *people {
+		if v.Cpf == cpf {
+			fmt.Println(v)
+			return
+		}
+	}
+
+	fmt.Println("Person not found")
+}
+
 func findPerson(people *[]Person, cpf string) (*Person, error) {
 	// Use case
 	// person1, err := findPerson(&people, "1234")
