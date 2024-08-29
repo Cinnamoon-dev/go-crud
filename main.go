@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	// "strconv"
 )
 
 type Car struct {
@@ -130,17 +129,7 @@ func inputInt(message string) int {
 	return newInt
 }
 
-func remove(slice []int, index int) []int {
-	// Use case
-	// list := []int{1, 2, 3, 4, 5}
-	// list = remove(list, 1)
-	return append(slice[:index], slice[index+1:]...)
-}
-
 func removePerson(slice []Person, index int) []Person {
-	// Use case
-	// list := []int{1, 2, 3, 4, 5}
-	// list = remove(list, 1)
 	return append(slice[:index], slice[index+1:]...)
 }
 
@@ -149,19 +138,21 @@ func main() {
 	var choice string
 
 	for {
-		choice = input("1 - create\n2 - read\n3 - edit\n4 - delete\n5 - exit")
+		choice = input("1 - create\n2 - read all\n3 - read one\n4 - edit\n5 - delete\n6 - exit")
 		switch choice {
 		case "1":
 			createPerson(&people)
 		case "2":
 			viewAllPerson(people)
 		case "3":
-			personCpf := input("Cpf of the person")
-			editPerson(&people, personCpf)
+			viewPerson(people, input("Cpf of the person"))
 		case "4":
 			personCpf := input("Cpf of the person")
-			people = deletePerson(people, personCpf)
+			editPerson(&people, personCpf)
 		case "5":
+			personCpf := input("Cpf of the person")
+			people = deletePerson(people, personCpf)
+		case "6":
 			return
 		}
 	}
