@@ -90,14 +90,14 @@ func editPerson(people *[]Person, cpf string) {
 	}
 }
 
-func deletePerson(people *[]Person, cpf string) []Person {
-	personIndex, err := findPerson(*people, cpf)
+func deletePerson(people []Person, cpf string) []Person {
+	personIndex, err := findPerson(people, cpf)
 	if err != nil {
 		fmt.Println(err)
-		return *people
+		return people
 	}
 
-	return removePerson(*people, personIndex)
+	return removePerson(people, personIndex)
 }
 
 func input(message string) string {
@@ -147,7 +147,7 @@ func main() {
 			editPerson(&people, personCpf)
 		case "4":
 			personCpf := input("Cpf of the person")
-			people = deletePerson(&people, personCpf)
+			people = deletePerson(people, personCpf)
 		case "5":
 			return
 		}
